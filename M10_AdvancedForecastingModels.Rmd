@@ -52,7 +52,7 @@ So far we considered only monthly seasonal patterns. But higher frequency data i
 
 * Ex: hourly data for electricity usage will have three types of seasonality: daily pattern, weekly pattern and annual pattern
 
-The `ts()` function we have been using to create time series objects can only handle one type of seasonality and the `frequency` argument only takes integer values. When working with higher frequency data with multiple seasonalities you should use the `msts` class from package `forecast`. 
+The `ts()` function we have been using to created time series objects can only handle one type of seasonality and the `frequency` argument only takes integer values. When working with higher frequency data with multiple seasonalities you should use the `msts` class from package `forecast`. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 #include only output table in report not the code used to generate
