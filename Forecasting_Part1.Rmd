@@ -13,6 +13,9 @@ library(readxl)
 
 ```{r}
 load_data<- read_excel(path="./data/load.xlsx",col_names=TRUE)
-
+head(load_data)
 ```
+
+
+
 
