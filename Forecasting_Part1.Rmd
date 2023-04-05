@@ -7,7 +7,16 @@ output: pdf_document
 
 ```{r}
 #load library
-
+library(lubridate)
+library(ggplot2)
+library(forecast)  
+library(Kendall)
+library(tseries)
+library(outliers)
+library(tidyverse)
+library(smooth)
+library(zoo)
+library(kableExtra)
 library(readxl)
 ```
 
@@ -16,6 +25,40 @@ load_data<- read_excel(path="./data/load.xlsx",col_names=TRUE)
 head(load_data)
 ```
 
+```{r}
+#average 24 hours data and combining with date
+load_data_new<-load_data %>%
+  select(h1:h24)
+daily_load_mean<-rowMeans(load_data_new,c(3,26))
+as.data.frame(daily_load_mean)
 
+load_data_date<-load_data %>%
+  select("date")
 
+cbind.data.frame(load_data_date,daily_load_mean)
+```
+
+```{r}
+#transfer to times series
+ts_load_hourly <- msts(daily_load_mean, 
+                            seasonal.periods =c(24,168,8766),
+                            start=c(2005,1,1))
+ts_load_daily <- msts(daily_load_mean, 
+                           seasonal.periods =c(7,365.25),
+                           start=c(2005,1,1))
+```
+
+```{r}
+#decomposing for both time series
+## ts_load_daily %>% mstl() = mstl(ts_load_daily)
+ts_load_daily %>% mstl() %>%
+  autoplot()
+
+ts_load_hourly %>% mstl() %>%
+  autoplot()
+```
+
+```{r}
+
+```
 
