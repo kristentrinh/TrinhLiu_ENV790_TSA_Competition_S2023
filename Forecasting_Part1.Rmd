@@ -74,7 +74,13 @@ ts_load_daily_2009 <- msts(daily_load_mean_data_df_2009$daily_load_mean,
 #decomposing data
 ts_load_daily_2009 %>% mstl() %>%
   autoplot()
+
+deseas_ts_load_daily_2009<-mstl(ts_load_daily_2009)
+plot(deseas_ts_load_daily_2009)
 ```
+
+
+
 ```{r}
 #create a subset for training purpose
 n_for = 365
@@ -87,5 +93,28 @@ ts_load_daily_2009_test <- subset(ts_load_daily_2009,
 
 autoplot(ts_load_daily_2009_train)
 autoplot(ts_load_daily_2009_test)
+```
+
+
+```{r}
+#model 1: ARIMA, non-seasonal
+
+
+#Forecast with ARIMA fit
+#also need to specify h for fourier terms
+ARIMA_Four_for <- forecast(ARIMA_Four_fit,
+                           xreg=fourier(ts_act_power_daily_train,
+                                        K=c(2,12),
+                                        h=365),
+                           h=365
+                           ) 
+
+
+deseas_ARIMA_load_daily_2009<-auto.arima(deseas_ts_load_daily_2009[,2], 
+                                         )
+
+deseas_ARIMA_forecast_load_daily_2009<-forecast(object=deseas_ARIMA_load_daily_2009, h=365)
+plot(deseas_ARIMA_forecast_load_daily_2009)
+
 ```
 
