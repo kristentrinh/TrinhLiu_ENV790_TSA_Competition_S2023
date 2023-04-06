@@ -18,6 +18,7 @@ library(smooth)
 library(zoo)
 library(kableExtra)
 library(readxl)
+library(writexl)
 ```
 
 ```{r}
@@ -117,4 +118,10 @@ deseas_ARIMA_forecast_load_daily_2009<-forecast(object=deseas_ARIMA_load_daily_2
 plot(deseas_ARIMA_forecast_load_daily_2009)
 
 ```
+```{r}
+deseas_ARIMA_forecast_load_daily_2009_df<-as.data.frame(deseas_ARIMA_forecast_load_daily_2009$mean)
+
+
+```
+
 
