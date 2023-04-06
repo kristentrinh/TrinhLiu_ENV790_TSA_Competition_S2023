@@ -35,27 +35,31 @@ as.data.frame(daily_load_mean)
 load_data_date<-load_data %>%
   select("date")
 
-cbind.data.frame(load_data_date,daily_load_mean)
+#creating variable to save this -kristen
+daily_load_mean_date_df<-cbind.data.frame(load_data_date,daily_load_mean)
+
+#filter to only 2005-2009
+daily_load_mean_data_df_2009<-filter(daily_load_mean_date_df, date <= "2009-12-31")
 ```
 
 ```{r}
 #transfer to times series
-ts_load_hourly <- msts(daily_load_mean, 
-                            seasonal.periods =c(24,168,8766),
-                            start=c(2005,1,1))
-ts_load_daily <- msts(daily_load_mean, 
-                           seasonal.periods =c(7,365.25),
-                           start=c(2005,1,1))
+#ts_load_hourly <- msts(daily_load_mean, 
+                            #seasonal.periods =c(24,168,8766),
+                            #start=c(2005,1,1))
+#ts_load_daily <- msts(daily_load_mean, 
+                          # seasonal.periods =c(7,365.25),
+                          # start=c(2005,1,1))
 ```
 
 ```{r}
 #decomposing for both time series
 ## ts_load_daily %>% mstl() = mstl(ts_load_daily)
-ts_load_daily %>% mstl() %>%
-  autoplot()
+#ts_load_daily %>% mstl() %>%
+ # autoplot()
 
-ts_load_hourly %>% mstl() %>%
-  autoplot()
+#ts_load_hourly %>% mstl() %>%
+ # autoplot()
 ```
 
 ```{r}
