@@ -63,6 +63,29 @@ daily_load_mean_data_df_2009<-filter(daily_load_mean_date_df, date <= "2009-12-3
 ```
 
 ```{r}
+#creating time series object for just 2005-2009 data
 
+ts_load_daily_2009 <- msts(daily_load_mean_data_df_2009$daily_load_mean, 
+                          seasonal.periods =c(7,365.25),
+                          start=c(2005,1,1))
+```
+
+```{r}
+#decomposing data
+ts_load_daily_2009 %>% mstl() %>%
+  autoplot()
+```
+```{r}
+#create a subset for training purpose
+n_for = 365
+ts_load_daily_2009_train <- subset(ts_load_daily_2009,
+                                   end = length(ts_load_daily_2009)-n_for)
+
+#create a subset for testing purpose
+ts_load_daily_2009_test <- subset(ts_load_daily_2009,
+                                   start = length(ts_load_daily_2009)-n_for)
+
+autoplot(ts_load_daily_2009_train)
+autoplot(ts_load_daily_2009_test)
 ```
 
