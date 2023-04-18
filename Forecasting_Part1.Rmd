@@ -250,7 +250,7 @@ autoplot(ts_load_daily_2009) +
 ```
 
 ```{r}
-autoplot(ts_load_daily_2009) +
+autoplot(ts_load_daily_2009_test) +
   autolayer(ETS_fit, PI=FALSE, series="STL+ETS") +
   autolayer(ARIMA_Four_for, PI=FALSE, series="ARIMA + Fourier") +
   autolayer(TBATS_for,PI=FALSE, series="TBATS") +
