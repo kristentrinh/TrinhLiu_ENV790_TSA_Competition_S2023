@@ -1,11 +1,13 @@
 ---
-title: "Forecasting Part 1"
+title: "Team 3 Forecasting Competition"
 author: "Kristen Trinh, Jinxi Liu"
 date: '2023-04-04'
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
-```{r warning=FALSE}
+```{r message=FALSE, warning=FALSE}
 #load library
 library(lubridate)
 library(ggplot2)
