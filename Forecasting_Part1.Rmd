@@ -254,6 +254,13 @@ autoplot(ts_load_daily_2009_test) +
   ylab("Daily Active Power") +
   guides(colour=guide_legend(title="Forecast"))
 ```
+>: Based on the model results, ARIMA Fourier and TBATS are the best models to forecast for 2011
+
+```{r}
+#creating daily load mean data for 2010
+daily_load_mean_data_df_2010<-filter(daily_load_mean_date_df, date <= "2010-12-31")
+
+```
 
 
 ```{r}
