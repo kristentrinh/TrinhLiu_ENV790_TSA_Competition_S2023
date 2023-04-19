@@ -275,15 +275,31 @@ ARIMA_Four_fit_2010 <- auto.arima(ts_load_daily_2010,
 #Forecast with ARIMA fit
 #also need to specify h for fourier terms
 ARIMA_Four_for_2010 <- forecast(ARIMA_Four_fit_2010,
-                           xreg=fourier(ts_load_daily_2010_train,
+                           xreg=fourier(ts_load_daily_2010,
                                         K=c(2,12),
                                         h=365),
                            h=365
                            )
-
+autoplot(ts_load_daily_2010) +
+  autolayer(ARIMA_Four_for_2010, series="ARIMA Fourier",PI=FALSE)+
+  ylab("Daily load") 
 
 
 ```
+
+```{r}
+#forecasting 2011 using TBAT model
+
+TBATS_fit_2010 <- tbats(ts_load_daily_2010)
+
+TBATS_for_2010 <- forecast(TBATS_fit_2010, h=365)
+
+autoplot(ts_load_daily_2010) +
+  autolayer(TBATS_for_2010, series="TBATS",PI=FALSE)+
+  ylab("Daily load") 
+
+```
+
 
 
 ```{r}
