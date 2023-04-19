@@ -5,7 +5,7 @@ date: '2023-04-04'
 output: pdf_document
 ---
 
-```{r}
+```{r warning=FALSE}
 #load library
 library(lubridate)
 library(ggplot2)
@@ -22,6 +22,7 @@ library(writexl)
 ```
 
 ```{r}
+#loading the data
 load_data<- read_excel(path="./data/load.xlsx",col_names=TRUE)
 head(load_data)
 ```
@@ -36,32 +37,13 @@ as.data.frame(daily_load_mean)
 load_data_date<-load_data %>%
   select("date")
 
-#creating variable to save this -kristen
+#creating variable to save this
 daily_load_mean_date_df<-cbind.data.frame(load_data_date,daily_load_mean)
 
 #filter to only 2005-2009
 daily_load_mean_data_df_2009<-filter(daily_load_mean_date_df, date <= "2009-12-31")
 ```
 
-```{r}
-#transfer to times series
-#ts_load_hourly <- msts(daily_load_mean, 
-                            #seasonal.periods =c(24,168,8766),
-                            #start=c(2005,1,1))
-#ts_load_daily <- msts(daily_load_mean, 
-                          # seasonal.periods =c(7,365.25),
-                          # start=c(2005,1,1))
-```
-
-```{r}
-#decomposing for both time series
-## ts_load_daily %>% mstl() = mstl(ts_load_daily)
-#ts_load_daily %>% mstl() %>%
- # autoplot()
-
-#ts_load_hourly %>% mstl() %>%
- # autoplot()
-```
 
 ```{r}
 #creating time series object for just 2005-2009 data
@@ -98,7 +80,7 @@ autoplot(ts_load_daily_2009_test)
 
 
 ```{r}
-#model 1: ARIMA, non-seasonal
+#model ARIMA, non-seasonal
 
 ARIMA_Four_fit <- auto.arima(ts_load_daily_2009_train, 
                              seasonal=FALSE, 
@@ -107,7 +89,7 @@ ARIMA_Four_fit <- auto.arima(ts_load_daily_2009_train,
                                           K=c(2,12))
                              )
 
-#Forecast with ARIMA fit
+#Forecast with ARIMA + Fourier
 #also need to specify h for fourier terms
 ARIMA_Four_for <- forecast(ARIMA_Four_fit,
                            xreg=fourier(ts_load_daily_2009_train,
@@ -142,7 +124,7 @@ autoplot(ts_load_daily_2009) +
 ```
 
 ```{r}
-# Model 2: ARIMA + FOURIER terms
+# plot ARIMA + FOURIER terms
 
 #Plot foresting results
 autoplot(ARIMA_Four_for) + ylab("Daily load")
@@ -155,7 +137,7 @@ autoplot(ts_load_daily_2009) +
 ```
 
 ```{r}
-# Model 3: TBATS
+# Model: TBATS
 
 # TBATS can take time to fit
 TBATS_fit <- tbats(ts_load_daily_2009_train)
@@ -175,7 +157,7 @@ autoplot(ts_load_daily_2009) +
 ```
 
 ```{r}
-# Model 4: Neural Network Time Series Forecasts
+# Model: Neural Network Time Series Forecasts
 
 #NN_fit <- nnetar(ts_act_power_daily_train,p=1,P=1)
 NN_fit <- nnetar(ts_load_daily_2009_train,p=1,P=0,xreg=fourier(ts_load_daily_2009_train, K=c(2,12)))
@@ -196,17 +178,17 @@ autoplot(ts_load_daily_2009) +
 ```
 
 ```{r}
-## Checking accuracy of the three models
+## Checking accuracy of the models
 
 ETS_scores <- accuracy(ETS_fit$mean,ts_load_daily_2009_test)  
 
-#Model 2: ARIMA + Fourier 
+#Model: ARIMA + Fourier 
 ARIMA_scores <- accuracy(ARIMA_Four_for$mean,ts_load_daily_2009_test)
 
-# Model 3:  TBATS 
+# Model:  TBATS 
 TBATS_scores <- accuracy(TBATS_for$mean,ts_load_daily_2009_test)
 
-# Model 3:  Neural Network 
+# Model:  Neural Network 
 NN_scores <- accuracy(NN_for$mean,ts_load_daily_2009_test)
 
 ```
@@ -226,6 +208,8 @@ cat("The best model by RMSE is:", row.names(scores[best_model_index,]))
 ```
 
 ```{r}
+#create table to compare scores
+
 kbl(scores, 
       caption = "Forecast Accuracy for Daily Load",
       digits = array(5,ncol(scores))) %>%
@@ -236,6 +220,8 @@ kbl(scores,
 
 
 ```{r}
+#plot all models
+
 autoplot(ts_load_daily_2009) +
   autolayer(ETS_fit, PI=FALSE, series="STL+ETS") +
   autolayer(ARIMA_Four_for, PI=FALSE, series="ARIMA + Fourier") +
@@ -246,6 +232,8 @@ autoplot(ts_load_daily_2009) +
 ```
 
 ```{r}
+#plot all models
+
 autoplot(ts_load_daily_2009_test) +
   autolayer(ETS_fit, PI=FALSE, series="STL+ETS") +
   autolayer(ARIMA_Four_for, PI=FALSE, series="ARIMA + Fourier") +
