@@ -260,6 +260,29 @@ autoplot(ts_load_daily_2009_test) +
 #creating daily load mean data for 2010
 daily_load_mean_data_df_2010<-filter(daily_load_mean_date_df, date <= "2010-12-31")
 
+ts_load_daily_2010<-msts(daily_load_mean_data_df_2010$daily_load_mean, 
+                          seasonal.periods =c(7,365.25),
+                          start=c(2005,1,1))
+
+
+ARIMA_Four_fit_2010 <- auto.arima(ts_load_daily_2010, 
+                             seasonal=FALSE, 
+                             lambda=0,
+                             xreg=fourier(ts_load_daily_2010, 
+                                          K=c(2,12))
+                             )
+
+#Forecast with ARIMA fit
+#also need to specify h for fourier terms
+ARIMA_Four_for_2010 <- forecast(ARIMA_Four_fit_2010,
+                           xreg=fourier(ts_load_daily_2010_train,
+                                        K=c(2,12),
+                                        h=365),
+                           h=365
+                           )
+
+
+
 ```
 
 
