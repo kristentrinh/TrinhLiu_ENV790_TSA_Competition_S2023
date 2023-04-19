@@ -301,19 +301,15 @@ autoplot(ts_load_daily_2010) +
 ```
 
 
-
 ```{r}
 #creating data frame to submit for competition
 
-deseas_ARIMA_forecast_load_daily_2009_df<-as.data.frame(deseas_ARIMA_forecast_load_daily_2009$mean)
-
-ARIMA_Four_for_df<-as.data.frame(ARIMA_Four_for$mean)
-
-ETS_fit_df<-as.data.frame(ETS_fit$mean)  
-
 TBATS_for_df<-as.data.frame(TBATS_for$mean)
 
-NN_for_df<-as.data.frame(NN_for$mean)
+ARIMA_Four_for_2010_df<-as.data.frame(ARIMA_Four_for_2010$mean)
+
+TBATS_for_df_2010<-as.data.frame(TBATS_for_2010$mean)
+
 
 ```
 
